@@ -216,10 +216,10 @@
         $error = empty(mysqli_error($link));
         parent::close_connection($link);
 
-        return $error;
+        // return $error;
       }
 
-      return True;
+      // return True;
     }
 
     public static function select(){
