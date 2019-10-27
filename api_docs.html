@@ -40,8 +40,12 @@
         margin: 0;
         width: 100%;
         height: 100%;
-        border-radius: 0 3px 0 0;
+        border-radius: 0 3px 0 0!important;
         border: none;
+      }
+
+      span.right-title {
+        border-radius: 3px 0 0 0!important;
       }
 
       div.parameters{
@@ -65,6 +69,7 @@
     <script type="text/javascript">
 
       data = [
+        // Auth
         {
         'section_name' : 'Auth',
         'calls': [
@@ -121,11 +126,9 @@
           },
           ]
         },
+        // !Auth
 
       ];
-
-
-
 
       let str = '';
 
@@ -138,12 +141,12 @@
         str+= `<li class="mb-3 list-group-item p-0 card">`;
         str+= `<div class="input-group mb-3">`;
         str+= `<div class="input-group-prepend">`;
-        str+= `<span class="input-group-text">${c.method}</span>`;
+        str+= `<span class="right-title input-group-text">${c.method}</span>`;
         str+= `</div>`;
         str+= `<span  class="form-control">${c.name}</span>`;
         str+= `<div class="input-group-append">`;
         str+= `<span class="input-group-text">url ${c.url}</span>`;
-        str+= `<button class="input-group-text bg-dark text-white min_button"> <i class="fa fa-angle-up"></i> </button>`;
+        str+= `<button class="input-group-text bg-dark text-white min_button"> <i class="fa fa-minus"></i> </button>`;
         str+= `</div>`;
         str+= `</div>`;
         if(c.header.length>0){
@@ -192,7 +195,6 @@
 
       $('body').append(str);
       $('.min_button').click(function(){
-        console.log($(this).parent().parent().parent());
         $(this).parent().parent().parent().css({'height': ($(this).parent().parent().parent().height() > 50)? '40px' : ''});
       });
 
