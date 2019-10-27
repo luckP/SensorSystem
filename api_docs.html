@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title></title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style media="screen">
+      *{
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container{
+        /* border: 1px solid black; */
+        display: line;
+        overflow: hidden;
+        width: 100%;
+        height: auto;
+      }
+
+      h3{
+        line-height: 50px;
+      }
+
+      h4 span{
+        font-size: 16px;
+      }
+
+      li{
+        overflow: hidden;
+      }
+
+      button{
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 0 3px 0 0;
+        border: none;
+      }
+
+      div.parameters{
+
+      }
+
+      input{
+        background: white!important;
+      }
+
+      button:focus {outline:0;}
+    </style>
+  </head>
+  <body>
+    <h2 class="m-3">API DOC</h2>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+      data = [
+        {
+        'section_name' : 'Auth',
+        'calls': [
+          // login
+          {
+            'name': 'Login',
+            'method': 'POST',
+            'url': 'http://rpiautomacao.com.br/api/SensorSystem/api.php?action=login',
+            'header': [],
+            'parameters': [
+              {
+                'name': 'email',
+                'require': true,
+                'example': 'example@gmail.com',
+              },
+              {
+                'name': 'password',
+                'require': true,
+                'example': '123456',
+              },
+            ],
+          },
+          // register
+          {
+            'name': 'Register',
+            'method': 'POST',
+            'url': 'http://rpiautomacao.com.br/api/SensorSystem/api.php?action=register',
+            'header': [],
+            'parameters': [
+              {
+                'name': 'email',
+                'require': true,
+                'example': 'example@gmail.com',
+              },
+              {
+                'name': 'password',
+                'require': true,
+                'example': '123456',
+              },
+            ],
+          },
+          // logout
+          {
+            'name': 'Logout',
+            'method': 'POST',
+            'url': 'http://rpiautomacao.com.br/api/SensorSystem/api.php?action=delete-user',
+            'header': [
+              {
+                'name': 'X-Forwarded-For',
+                'example': '8b1a9953c4611296a827abf8c47804d7',
+              },
+            ],
+            'parameters': [],
+          },
+          ]
+        },
+
+      ];
+
+
+
+
+      let str = '';
+
+      data.forEach(s=>{
+        str+= '<section class="p-3">';
+        str+= `<h3>${s.section_name}</h3>`;
+        str+= `<ul class="list-group mt-3">`;
+        s.calls.forEach(c=>{
+
+        str+= `<li class="mb-3 list-group-item p-0 card">`;
+        str+= `<div class="input-group mb-3">`;
+        str+= `<div class="input-group-prepend">`;
+        str+= `<span class="input-group-text">${c.method}</span>`;
+        str+= `</div>`;
+        str+= `<span  class="form-control">${c.name}</span>`;
+        str+= `<div class="input-group-append">`;
+        str+= `<span class="input-group-text">url ${c.url}</span>`;
+        str+= `<button class="input-group-text bg-dark text-white min_button"> <i class="fa fa-angle-up"></i> </button>`;
+        str+= `</div>`;
+        str+= `</div>`;
+        if(c.header.length>0){
+          str+= `<div class="m-5 p-3 parameters bg-dark text-white">`;
+          str+= `<h5>Header:</h5>`;
+          str+= `<ul>`;
+          c.header.forEach(h=>{
+            str+= `<li class="input-group mb-3">`;
+            str+= `<div class="input-group-prepend">`;
+            str+= `<span class="input-group-text">${h.name}</span>`;
+            str+= `</div>`;
+            str+= `<input disabled type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" value="${h.example}">`;
+            str+= `</li>`;
+          });
+          str+= `</ul>`;
+          str+= `</div>`;
+        }
+
+        if(c.parameters.length>0){
+          str+= `<div class="m-5 p-3 parameters bg-light text-dark">`;
+          str+= `<h5>Parameters:</h5>`;
+          str+= `<ul>`;
+          c.parameters.forEach(p=>{
+            str+= `<li class="input-group mb-3">`;
+            str+= `<div class="input-group-prepend">`;
+            str+= `<span class="input-group-text">${p.name}`;
+
+            if(p.require){
+              str+= `<span class="text-danger"*</span>`;
+            }
+
+            str+= `</span>`;
+            str+= `</div>`;
+            str+= `<input disabled type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" value="${p.example}">`;
+            str+= `</li>`;
+          });
+          str+= `</ul>`;
+          str+= `</div>`;
+        }
+        str+= `</li>`;
+
+        });
+        str+= `</ul>`;
+        str+= `</section>`;
+      });
+
+      $('body').append(str);
+      $('.min_button').click(function(){
+        console.log($(this).parent().parent().parent());
+        $(this).parent().parent().parent().css({'height': ($(this).parent().parent().parent().height() > 50)? '40px' : ''});
+      });
+
+    </script>
+  </body>
+</html>

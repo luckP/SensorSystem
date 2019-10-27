@@ -2,11 +2,12 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title></title>
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
 
     <style media="screen">
       *{
@@ -16,7 +17,8 @@
       }
 
       .container{
-        border: 1px solid black;
+        /* border: 1px solid black; */
+        display: line;
         overflow: hidden;
         width: 100%;
         height: auto;
@@ -40,29 +42,31 @@
   </head>
   <body>
 
-    <h1>Tests sensors_api</h1>
+    <h2 class="m-3">Tests sensors_api</h2>
 
-    <div class="container mb-3 pb-3">
-      <button type="submit" class="btn btn-default float-right">
+    <div class="container d-block card mb-3 pb-3">
+      <button type="button" class="btn btn-default float-right">
         <!-- <i class="fa fa-angle-down"></i> -->
         <i class="fa fa-angle-up"></i>
       </button>
-      <h3>Title</h3>
+      <h3>Auth</h3>
 
       <div class="comment">
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        <p> Testes referentes as todas as funcoes referente ao login.</p>
       </div>
 
       <ul class="list-group mt-3">
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item list-group-item-primary">This is a primary list group item</li>
-        <li class="list-group-item list-group-item-secondary">This is a secondary list group item</li>
-        <li class="list-group-item list-group-item-success">This is a success list group item</li>
-        <li class="list-group-item list-group-item-danger">This is a danger list group item</li>
-        <li class="list-group-item list-group-item-warning">This is a warning list group item</li>
-        <li class="list-group-item list-group-item-info">This is a info list group item</li>
-        <li class="list-group-item list-group-item-light">This is a light list group item</li>
-        <li class="list-group-item list-group-item-dark">This is a dark list group item</li>
+        <li class="list-group-item list-group-item-primary">Login</li>
+        <li class="list-group-item list-group-item-primary">Login with wrong email</li>
+        <li class="list-group-item list-group-item-primary">Login with wrong password</li>
+        <li class="list-group-item list-group-item-primary">Login with wrong email and password</li>
+        <li class="list-group-item list-group-item-primary">Login with null email or password</li>
+        <li class="list-group-item list-group-item-primary">Legister</li>
+        <li class="list-group-item list-group-item-primary">Legister without a valid email</li>
+        <li class="list-group-item list-group-item-primary">Legister with existing email</li>
+        <li class="list-group-item list-group-item-primary">Legister with null value of email or password</li>
+        <li class="list-group-item list-group-item-primary">Logout</li>
+        <li class="list-group-item list-group-item-primary">Delete user</li>
       </ul>
     </div>
 
@@ -71,17 +75,32 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script type="text/javascript">
-    console.log('teste');
 
-    $('button').click(function(){
-      let h = $(this).parent().height();
+      const url = 'http://localhost:8888/SensorSystem/api.php';
 
-      console.log(h);
+      const type_result = {
+        'loading': 'list-group-item-primary',
+        'success': 'list-group-item-success',
+        'danger':  'list-group-item-danger',
+        'warning': 'list-group-item-warning'
+      }
 
-      $(this).parent().css({
-        'height': (h > 50)? '50px' : ''
+      $('button').click(function(){
+        $(this).parent().css({'height': ($(this).parent().height() > 50)? '50px' : ''});
       });
-    });
+
+      function testRegister(){
+        $.ajax({
+          url: url + "",
+          context: document.body
+        }).done(function() {
+          $( this ).addClass( "done" );
+        });
+      }
+
+      $( document ).ready(function() {
+
+      });
 
     </script>
 
