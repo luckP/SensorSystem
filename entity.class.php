@@ -213,12 +213,13 @@
         $link = parent::init_connection();
         $query = "DELETE FROM auth_tokens WHERE (id = $this->id); ";
         mysqli_query($link, $query);
-
         $error = empty(mysqli_error($link));
         parent::close_connection($link);
 
         return $error;
       }
+
+      return True;
     }
 
     public static function select(){
