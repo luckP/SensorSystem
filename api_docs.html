@@ -128,6 +128,138 @@
         },
         // !Auth
 
+        //  Company
+        {
+        'section_name' : 'Company',
+        'calls': [
+          // Create Company
+          {
+            'name': 'Create Company',
+            'method': 'POST',
+            'url': 'http://rpiautomacao.com.br/api/SensorSystem/api.php?action=create_company',
+            'header': [
+              {
+                'name': 'X-Forwarded-For',
+                'example': '8b1a9953c4611296a827abf8c47804d7',
+              },
+            ],
+            'parameters': [
+              {
+                'name': 'name',
+                'require': true,
+                'example': 'company 1',
+              },
+            ],
+          },
+
+          // Create Company
+          {
+            'name': 'Join User to Campany',
+            'method': 'POST',
+            'url': 'http://rpiautomacao.com.br/api/SensorSystem/api.php?action=joinUserToCampany',
+            'header': [
+              {
+                'name': 'X-Forwarded-For',
+                'example': '8b1a9953c4611296a827abf8c47804d7',
+              },
+            ],
+            'parameters': [
+              {
+                'name': 'user_id',
+                'require': true,
+                'example': '1',
+              },
+              {
+                'name': 'company_id',
+                'require': true,
+                'example': '1',
+              },
+            ],
+          },
+          ]
+        },
+        // !Company
+
+        //  Sensors
+        {
+        'section_name' : 'Sensor',
+        'calls': [
+          // Create Sensor
+          {
+            'name': 'Create Sensor',
+            'method': 'POST',
+            'url': 'http://rpiautomacao.com.br/api/SensorSystem/api.php?action=createSensor',
+            'header': [
+              {
+                'name': 'X-Forwarded-For',
+                'example': '8b1a9953c4611296a827abf8c47804d7',
+              },
+            ],
+            'parameters': [
+              {
+                'name': 'name',
+                'require': true,
+                'example': 'sensor 1',
+              },
+              {
+                'name': 'raw_min_val',
+                'require': true,
+                'example': '0',
+              },
+              {
+                'name': 'raw_max_val',
+                'require': true,
+                'example': '1024',
+              },
+              {
+                'name': 'min_val',
+                'require': true,
+                'example': '10',
+              },
+              {
+                'name': 'max_val',
+                'require': true,
+                'example': '23',
+              },
+              {
+                'name': 'measure_units',
+                'require': true,
+                'example': 'temperature',
+              },
+              {
+                'name': 'company_id',
+                'require': true,
+                'example': '2',
+              },
+            ],
+          },
+          {
+            'name': 'Add Sensor Value',
+            'method': 'POST',
+            'url': 'http://rpiautomacao.com.br/api/SensorSystem/api.php?action=addSensorValue',
+            'header': [
+              {
+                'name': 'X-Forwarded-For',
+                'example': '8b1a9953c4611296a827abf8c47804d7',
+              },
+            ],
+            'parameters': [
+              {
+                'name': 'sensor_id',
+                'require': true,
+                'example': '1',
+              },
+              {
+                'name': 'val',
+                'require': true,
+                'example': '12.3',
+              },
+            ],
+          },
+          ]
+        },
+        // !Company
+
       ];
 
       let str = '';
