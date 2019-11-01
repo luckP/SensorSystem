@@ -32,16 +32,18 @@
     private $id;
     private $email;
     private $password;
+    private $status;
 
-    function __construct($e, $p){
+    function __construct($e, $p, $s){
       $this->email = $e;
       $this->password = $p;
+      $this->status = $s;
     }
 
     function insert(){
       if(!$this->id){
         $link = parent::init_connection();
-        $query = "INSERT INTO user (email, password) VALUES ('$this->email' , '$this->password');";
+        $query = "INSERT INTO user (email, password, status) VALUES ('$this->email' , '$this->password', '$this->status');";
         mysqli_query($link, $query);
         $this->id = mysqli_insert_id($link);
         parent::close_connection($link);
@@ -54,7 +56,7 @@
     public function update(){
       if($this->id){
         $link = parent::init_connection();
-        $query = "UPDATE user SET email = '$this->email', password = '$this->password' WHERE ( `id` = $this->id );";
+        $query = "UPDATE user SET email = '$this->email', password = '$this->password', status= '$this->status' WHERE ( `id` = $this->id );";
         mysqli_query($link, $query);
         parent::close_connection($link);
       }
@@ -87,7 +89,7 @@
       if ($result->num_rows > 0) {
           while($row = $result->fetch_assoc()) {
               // echo "id: " . $row["id"];
-              $user = new User($row['email'], $row['password']);
+              $user = new User($row['email'], $row['password'], $row['status']);
               $user->setId($row['id']);
               array_push($users, $user);
           }
@@ -107,39 +109,42 @@
           while($row = $result->fetch_assoc()) {
               // echo "id: " . $row["id"];
               $this->setId($row['id']);
+              $this->setStatus($row['status']);
           }
       }
 
       parent::close_connection($link);
     }
 
-    public static function select_by_cols($colmns){
-      // $entity = new Entity();
-      // $link = $entity->init_connection();
-      // $query = "SELECT * FROM user WHERE id = ";
-      // mysqli_query($link, $query);
-      // $result = $link->query($query);
-      // $users = array();
-      //
-      // if ($result->num_rows == 1) {
-      //     while($row = $result->fetch_assoc()) {
-      //         // echo "id: " . $row["id"];
-      //         $user = new User($row['email'], $row['password']);
-      //         $user->setId($row['id']);
-      //         array_push($users, $user);
-      //     }
-      // }
-      //
-      // $entity->close_connection($link);
-      // return $users;
+    public function select_by_user_id(){
+      $link = parent::init_connection();
+      $query = "SELECT * FROM user where id = $this->id";
+      mysqli_query($link, $query);
+      $result = $link->query($query);
+      if ($result->num_rows == 1) {
+          while($row = $result->fetch_assoc()) {
+              // echo "id: " . $row["id"];
+              // $this->setId($row['id']);
+              $this->setEmail($row['email']);
+              $this->setPassword($row['password']);
+              $this->setStatus($row['status']);
+          }
+      }
+      else{
+        $this->setId(0);
+      }
+
+      parent::close_connection($link);
     }
 
+    public static function select_by_cols($colmns){}
+
     public function toString(){
-      return "id: $this->id, email: $this->email, password: $this->password";
+      return "id: $this->id, email: $this->email, password: $this->password, status: $this->status";
     }
 
     public function toJson(){
-      return "{'id': $this->id, 'email': '$this->email'}";
+      return "{'id': $this->id, 'email': '$this->email', 'status': '$this->status'}";
     }
 
     // GETs and SETs
@@ -165,6 +170,14 @@
 
     public function setPassword($password){
       $this->password = $password;
+    }
+
+    public function getStatus(){
+      return $this->status;
+    }
+
+    public function setStatus($status){
+      $this->status = $status;
     }
   }
 
@@ -211,15 +224,15 @@
     public function delete(){
       if($this->id){
         $link = parent::init_connection();
-        $query = "DELETE FROM auth_tokens WHERE (id = $this->id); ";
+        $query = "DELETE FROM auth_tokens WHERE (id = $this->id);";
         mysqli_query($link, $query);
         // $error = empty(mysqli_error($link));
         parent::close_connection($link);
 
-        // return $error;
+        return True;
       }
 
-      // return True;
+      return Frue;
     }
 
     public static function select(){
@@ -262,6 +275,10 @@
             }
           parent::close_connection($link);
       }
+      else {
+        $this->setId(0);
+        $this->delete();
+      }
     }
 
     public function select_by_token(){
@@ -279,6 +296,10 @@
               $this->setUserId($row['user_id']);
           }
         parent::close_connection($link);
+    }
+
+    else{
+      $this->setId(0);
     }
   }
 
@@ -298,6 +319,35 @@
         $this->setDateExpiry(date('Y-m-d H:i:s', strtotime(' +1 day')));
         $this->update();
       }
+    }
+
+    public function getUserByToken(){
+      $link = parent::init_connection();
+
+      $user = new User('', '', '');
+      $user->setId($this->getUserId());
+      $user->select_by_user_id();
+
+      if($user->getId()!=0){
+        return $user;
+      }
+      // echo '->';
+      return False;
+
+      // $query = "SELECT * FROM user WHERE id = '$this->getUserId()'";
+      // mysqli_query($link, $query);
+      // $result = $link->query($query);
+      //
+      // if ($result->num_rows == 1) {
+      //     while($row = $result->fetch_assoc()) {
+      //       $user = new User($row['email'], $row['password'], $row['status']);
+      //       $user->setId($row['id']);
+      //       return $user;
+      //     }
+      //   parent::close_connection($link);
+      // }
+
+      return False;
     }
 
     public function toString(){
@@ -475,8 +525,9 @@
 
     function insert(){
       if(!$this->id){
+
         $link = parent::init_connection();
-        $query = "INSERT INTO sensor (name, raw_min_val, raw_max_val, min_val, max_val, measure_units, company_id) VALUES ( '$name', $raw_min_val, $raw_max_val, $min_val, $max_val, '$measure_units', $company_id);";
+        $query = "INSERT INTO sensor (name, raw_min_val, raw_max_val, min_val, max_val, measure_units, company_id) VALUES ( '$this->name', $this->raw_min_val, $this->raw_max_val, $this->min_val, $this->max_val, '$this->measure_units', $this->company_id);";
         mysqli_query($link, $query);
         $this->id = mysqli_insert_id($link);
         parent::close_connection($link);
@@ -535,11 +586,11 @@
     }
 
     public function toString(){
-      return "id: $id, name: $name, raw_min_val: $raw_min_val, raw_max_val: $raw_max_val, min_val: $min_val, max_val: $max_val, measure_units: $measure_units, company_id: $company_id ";
+      return "id: $this->id, name: $this->name, raw_min_val: $this->raw_min_val, raw_max_val: $this->raw_max_val, min_val: $this->min_val, max_val: $this->max_val, measure_units: $this->measure_units, company_id: $this->company_id ";
     }
 
     public function toJson(){
-      return "{'id': '$id', 'name': '$name', 'raw_min_val': '$raw_min_val', 'raw_max_val': '$raw_max_val', 'min_val': '$min_val', 'max_val': '$max_val', 'measure_units': '$measure_units', 'company_id': '$company_id'}";
+      return "{'id': '$this->id', 'name': '$this->name', 'raw_min_val': '$this->raw_min_val', 'raw_max_val': '$this->raw_max_val', 'min_val': '$this->min_val', 'max_val': '$this->max_val', 'measure_units': '$this->measure_units', 'company_id': '$this->company_id'}";
     }
 
     // GETs and SETs
@@ -794,12 +845,11 @@
     }
 
     public function toString(){
-      return "id: $this->id, sensor_id: $this->sensor_id, val: $this->val";
+      return "id: $this->id, user_id: $this->user_id, company_id: $this->company_id, level: '$this->level";
     }
 
     public function toJson(){
-      return "{'id': '$this->id', 'sensor_id': '$this->sensor_id', 'val': '$this->val'}";
-
+      return "{ 'id': '$this->id', 'user_id': '$this->user_id', 'company_id': '$this->company_id', 'level: '$this->level }";
     }
 
     // GETs and SETs
