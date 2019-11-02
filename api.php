@@ -2,7 +2,7 @@
   include('entity.class.php');
   require('config.php');
 
-  header("X-XSS-Protection: 0");
+  header('Access-Control-Allow-Origin: *');
 
   if (!empty($_GET['action'])){
     $action = $_GET['action'];
