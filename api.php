@@ -2,6 +2,8 @@
   include('entity.class.php');
   require('config.php');
 
+  header("X-XSS-Protection: 0");
+
   if (!empty($_GET['action'])){
     $action = $_GET['action'];
     switch ($action) {
