@@ -1,8 +1,9 @@
 <?php
+  header("Access-Control-Allow-Origin: *");
+
   include('entity.class.php');
   require('config.php');
 
-  header('Access-Control-Allow-Origin: *');
 
   if (!empty($_GET['action'])){
     $action = $_GET['action'];
